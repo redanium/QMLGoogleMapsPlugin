@@ -1,9 +1,7 @@
 Build
 =====
 
-- CMake based build system (and cpack)
 - Fix install rules for qmake
-- License headers
 
 Open Street Map
 ===============
