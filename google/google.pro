@@ -3,6 +3,8 @@ CONFIG += plugin
 TARGET = $$qtLibraryTarget(qtgeoservices_google)
 PLUGIN_TYPE=geoservices
 
+include(../common.pri)
+
 QT += network
 
 CONFIG += mobility
