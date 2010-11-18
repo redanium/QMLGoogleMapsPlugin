@@ -1,3 +1,3 @@
 TEMPLATE = subdirs
 
-SUBDIRS += openstreetmap google
+SUBDIRS += openstreetmap

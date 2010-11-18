@@ -2,21 +2,3 @@ Open Street Map
 ===============
 
 - Better default servers (a, b, c, d subdomains ?)
-
-
-Google
-======
-
-- Hybrid Map (streets + sat)
-  - Store 2 QNetworkRequest in QGeoMapReplyGoogle
-
-- Routing manager
-  - http://code.google.com/apis/maps/documentation/directions/
-
-- Search Manager
-  - http://code.google.com/apis/maps/documentation/places/
-
-Google Static Map
-=================
-
-- Make it works
