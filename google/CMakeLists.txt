@@ -47,7 +47,7 @@ set (google_HDRS
   qgeoserviceproviderplugin_google.h
 )
 
-qt4_wrap_cpp(google_MOCS ${lugdulov_HDRS})
+qt4_wrap_cpp(google_MOCS ${google_HDRS})
 
 add_library (qtgeoservices_google ${PLUGIN_TYPE} ${google_SRCS} ${google_MOCS})
 target_link_libraries(qtgeoservices_google ${QT_LIBRARIES})

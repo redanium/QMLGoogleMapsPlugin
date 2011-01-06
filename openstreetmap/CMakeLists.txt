@@ -47,7 +47,7 @@ set (openstreetmap_HDRS
   qgeoserviceproviderplugin_openstreetmap.h
 )
 
-qt4_wrap_cpp(openstreetmap_MOCS ${lugdulov_HDRS})
+qt4_wrap_cpp(openstreetmap_MOCS ${openstreetmap_HDRS})
 
 add_library (qtgeoservices_openstreetmap ${PLUGIN_TYPE} ${openstreetmap_SRCS} ${openstreetmap_MOCS})
 target_link_libraries(qtgeoservices_openstreetmap ${QT_LIBRARIES})
