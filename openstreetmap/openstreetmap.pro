@@ -11,14 +11,21 @@ CONFIG += mobility
 MOBILITY = location
 
 HEADERS += \
-            qgeomappingmanagerengine_openstreetmap.h \
-            qgeomapreply_openstreetmap.h \
-            qgeoserviceproviderplugin_openstreetmap.h
+            qgeomappingmanagerengine_osm.h \
+            qgeomapreply_osm.h \
+            qgeoserviceproviderplugin_osm.h \
+            qgeocodeparser.h \
+            qgeosearchreply_osm.h \
+            qgeosearchmanagerengine_osm.h
+
 
 SOURCES += \
-            qgeomappingmanagerengine_openstreetmap.cpp \
-            qgeomapreply_openstreetmap.cpp \
-            qgeoserviceproviderplugin_openstreetmap.cpp
+            qgeomappingmanagerengine_osm.cpp \
+            qgeomapreply_osm.cpp \
+            qgeoserviceproviderplugin_osm.cpp \
+            qgeocodeparser.cpp \
+            qgeosearchreply_osm.cpp \
+            qgeosearchmanagerengine_osm.cpp
 
 symbian {
     TARGET.EPOCALLOWDLLDATA = 1

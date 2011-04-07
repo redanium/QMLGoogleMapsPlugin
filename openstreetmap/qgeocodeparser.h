@@ -39,39 +39,42 @@
 **
 ****************************************************************************/
 
-#ifndef QGEOMAPPINGMANAGERENGINE_OPENSTREETMAP_H
-#define QGEOMAPPINGMANAGERENGINE_OPENSTREETMAP_H
+#ifndef QGEOCODEPARSER_H
+#define QGEOCODEPARSER_H
 
-#include "qgeoserviceproviderplugin_openstreetmap.h"
+#include <QString>
+#include <QList>
 
-#include <qgeoserviceprovider.h>
-#include <qgeotiledmappingmanagerengine.h>
+class QXmlStreamReader;
+class QIODevice;
 
-class QNetworkAccessManager;
-class QNetworkDiskCache;
+#include <qgeocoordinate.h>
+#include <qgeoboundingbox.h>
+#include <qgeoplace.h>
+#include <qgeoaddress.h>
 
 QTM_USE_NAMESPACE
 
-class QGeoMappingManagerEngineOpenStreetMap : public QGeoTiledMappingManagerEngine
+class QGeoCodeParser
 {
-    Q_OBJECT
 public:
-    QGeoMappingManagerEngineOpenStreetMap(const QMap<QString, QVariant> &parameters,
-                                  QGeoServiceProvider::Error *error,
-                                  QString *errorString);
-    ~QGeoMappingManagerEngineOpenStreetMap();
+    QGeoCodeParser();
+    ~QGeoCodeParser();
 
-    QGeoMapData* createMapData();
-    QGeoTiledMapReply* getTileImage(const QGeoTiledMapRequest &request);
+    bool parse(QIODevice* source);
+
+    QList<QGeoPlace> results() const;
+    QString errorString() const;
 
 private:
-    Q_DISABLE_COPY(QGeoMappingManagerEngineOpenStreetMap)
+    bool parseRootElement();
+    bool parsePlace(QGeoPlace *place);
+    bool parseBoundingBox(QGeoBoundingBox *bounds, QString str);
 
-    QString getRequestString(const QGeoTiledMapRequest &request) const;
+    QXmlStreamReader *m_reader;
 
-    QNetworkAccessManager *m_networkManager;
-    QNetworkDiskCache *m_cache;
-    QStringList m_servers;
+    QList<QGeoPlace> m_results;
+    QString m_errorString;
 };
 
 #endif

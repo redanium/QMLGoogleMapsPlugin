@@ -39,33 +39,39 @@
 **
 ****************************************************************************/
 
-#ifndef QGEOMAPREPLY_OPENSTREETMAP_H
-#define QGEOMAPREPLY_OPENSTREETMAP_H
+#ifndef QGEOMAPPINGMANAGERENGINE_OSM_H
+#define QGEOMAPPINGMANAGERENGINE_OSM_H
 
-#include <qgeotiledmapreply.h>
-#include <QNetworkReply>
+#include "qgeoserviceproviderplugin_osm.h"
+
+#include <qgeoserviceprovider.h>
+#include <qgeotiledmappingmanagerengine.h>
+
+class QNetworkAccessManager;
+class QNetworkDiskCache;
 
 QTM_USE_NAMESPACE
 
-class QGeoMapReplyOpenStreetMap : public QGeoTiledMapReply
+class QGeoMappingManagerEngineOsm : public QGeoTiledMappingManagerEngine
 {
     Q_OBJECT
-
 public:
-    QGeoMapReplyOpenStreetMap(QNetworkReply *reply, const QGeoTiledMapRequest &request, QObject *parent = 0);
-    ~QGeoMapReplyOpenStreetMap();
+    QGeoMappingManagerEngineOsm(const QMap<QString, QVariant> &parameters,
+                                  QGeoServiceProvider::Error *error,
+                                  QString *errorString);
+    virtual ~QGeoMappingManagerEngineOsm();
 
-    void abort();
-
-    QNetworkReply* networkReply() const;
-
-private slots:
-    void replyDestroyed();
-    void networkFinished();
-    void networkError(QNetworkReply::NetworkError error);
+    QGeoMapData* createMapData();
+    QGeoTiledMapReply* getTileImage(const QGeoTiledMapRequest &request);
 
 private:
-    QNetworkReply *m_reply;
+    Q_DISABLE_COPY(QGeoMappingManagerEngineOsm)
+
+    QString getRequestString(const QGeoTiledMapRequest &request) const;
+
+    QMap<QString, QVariant> m_parameters;
+    QNetworkAccessManager *m_nam;
+    QStringList m_servers;
 };
 
 #endif

@@ -39,9 +39,11 @@
 **
 ****************************************************************************/
 
-#include "qgeomapreply_openstreetmap.h"
+#include <qgeotiledmaprequest.h>
 
-QGeoMapReplyOpenStreetMap::QGeoMapReplyOpenStreetMap(QNetworkReply *reply, const QGeoTiledMapRequest &request, QObject *parent)
+#include "qgeomapreply_google.h"
+
+QGeoMapReplyGoogle::QGeoMapReplyGoogle(QNetworkReply *reply, const QGeoTiledMapRequest &request, QObject *parent)
         : QGeoTiledMapReply(request, parent),
         m_reply(reply)
 {
@@ -65,16 +67,16 @@ QGeoMapReplyOpenStreetMap::QGeoMapReplyOpenStreetMap(QNetworkReply *reply, const
             SLOT(replyDestroyed()));
 }
 
-QGeoMapReplyOpenStreetMap::~QGeoMapReplyOpenStreetMap()
+QGeoMapReplyGoogle::~QGeoMapReplyGoogle()
 {
 }
 
-QNetworkReply* QGeoMapReplyOpenStreetMap::networkReply() const
+QNetworkReply* QGeoMapReplyGoogle::networkReply() const
 {
     return m_reply;
 }
 
-void QGeoMapReplyOpenStreetMap::abort()
+void QGeoMapReplyGoogle::abort()
 {
     if (!m_reply)
         return;
@@ -82,12 +84,12 @@ void QGeoMapReplyOpenStreetMap::abort()
     m_reply->abort();
 }
 
-void QGeoMapReplyOpenStreetMap::replyDestroyed()
+void QGeoMapReplyGoogle::replyDestroyed()
 {
     m_reply = 0;
 }
 
-void QGeoMapReplyOpenStreetMap::networkFinished()
+void QGeoMapReplyGoogle::networkFinished()
 {
     if (!m_reply)
         return;
@@ -97,14 +99,20 @@ void QGeoMapReplyOpenStreetMap::networkFinished()
     }
 
     setMapImageData(m_reply->readAll());
-    setMapImageFormat("PNG");
+
+    if (request().mapType() == QGraphicsGeoMap::SatelliteMapDay ||
+	request().mapType() == QGraphicsGeoMap::SatelliteMapNight)
+      setMapImageFormat("JPEG");
+    else
+      setMapImageFormat("PNG");
+
     setFinished(true);
 
     m_reply->deleteLater();
     m_reply = 0;
 }
 
-void QGeoMapReplyOpenStreetMap::networkError(QNetworkReply::NetworkError error)
+void QGeoMapReplyGoogle::networkError(QNetworkReply::NetworkError error)
 {
     if (!m_reply)
         return;

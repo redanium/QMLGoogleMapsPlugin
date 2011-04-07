@@ -39,26 +39,30 @@
 **
 ****************************************************************************/
 
-#ifndef QGEOSERVICEPROVIDER_OPENSTREETMAP_H
-#define QGEOSERVICEPROVIDER_OPENSTREETMAP_H
+#ifndef QGEOSERVICEPROVIDER_OSM_H
+#define QGEOSERVICEPROVIDER_OSM_H
 
 #include <qgeoserviceproviderfactory.h>
 #include <QObject>
 
 QTM_USE_NAMESPACE
 
-class QGeoServiceProviderFactoryOpenStreetMap : public QObject, public QGeoServiceProviderFactory
+class QGeoServiceProviderFactoryOsm : public QObject, public QGeoServiceProviderFactory
 {
     Q_OBJECT
     Q_INTERFACES(QtMobility::QGeoServiceProviderFactory)
 public:
-    QGeoServiceProviderFactoryOpenStreetMap();
-    ~QGeoServiceProviderFactoryOpenStreetMap();
+    QGeoServiceProviderFactoryOsm();
+    ~QGeoServiceProviderFactoryOsm();
 
     QString providerName() const;
     int providerVersion() const;
 
     QGeoMappingManagerEngine* createMappingManagerEngine(const QMap<QString, QVariant> &parameters,
+            QGeoServiceProvider::Error *error,
+            QString *errorString) const;
+
+    QGeoSearchManagerEngine* createSearchManagerEngine(const QMap<QString, QVariant> &parameters,
             QGeoServiceProvider::Error *error,
             QString *errorString) const;
 };

@@ -39,32 +39,33 @@
 **
 ****************************************************************************/
 
-#include "qgeoserviceproviderplugin_openstreetmap.h"
+#ifndef PARSEPROXY_OSM_H
+#define PARSEPROXY_OSM_H
 
-#include "qgeomappingmanagerengine_openstreetmap.h"
-
-#include <QtPlugin>
 #include <QNetworkProxy>
+#include <QUrl>
 
-QGeoServiceProviderFactoryOpenStreetMap::QGeoServiceProviderFactoryOpenStreetMap() {}
-
-QGeoServiceProviderFactoryOpenStreetMap::~QGeoServiceProviderFactoryOpenStreetMap() {}
-
-QString QGeoServiceProviderFactoryOpenStreetMap::providerName() const
+static inline QNetworkProxy parseProxy(const QString &str)
 {
-    return "openstreetmap";
+  QNetworkProxy proxy;
+  QUrl url(str);
+
+  if (url.scheme() == "socks5")
+    proxy.setType(QNetworkProxy::Socks5Proxy);
+  else if (url.scheme() == "direct")
+    proxy.setType(QNetworkProxy::NoProxy);
+  else
+    proxy.setType(QNetworkProxy::HttpProxy);
+
+  proxy.setHostName(url.host());
+  proxy.setPort(url.port());
+
+  if (!url.userName().isEmpty())
+    proxy.setUser(url.userName());
+  if (!url.password().isEmpty())
+    proxy.setPassword(url.password());
+
+  return proxy;
 }
 
-int QGeoServiceProviderFactoryOpenStreetMap::providerVersion() const
-{
-    return 1;
-}
-
-QGeoMappingManagerEngine* QGeoServiceProviderFactoryOpenStreetMap::createMappingManagerEngine(const QMap<QString, QVariant> &parameters,
-        QGeoServiceProvider::Error *error,
-        QString *errorString)const
-{
-    return new QGeoMappingManagerEngineOpenStreetMap(parameters, error, errorString);
-}
-
-Q_EXPORT_PLUGIN2(qtgeoservices_openstreetmap, QGeoServiceProviderFactoryOpenStreetMap)
+#endif /* !PARSEPROXY_OSM_H */
