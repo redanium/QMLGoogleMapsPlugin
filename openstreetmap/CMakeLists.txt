@@ -15,7 +15,7 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-project(qtgeoservices_openstreetmap)
+project(qtgeoservices_osm)
 
 include_directories (
   ${CMAKE_CURRENT_BUILD_DIR}
@@ -35,24 +35,34 @@ else()
 endif()
 
 
-set (openstreetmap_SRCS
-  qgeomappingmanagerengine_openstreetmap.cpp
-  qgeomapreply_openstreetmap.cpp
-  qgeoserviceproviderplugin_openstreetmap.cpp
+set (osm_SRCS
+  qgeomappingmanagerengine_osm.cpp
+  qgeomapreply_osm.cpp
+  qgeoserviceproviderplugin_osm.cpp
+  qgeocodeparser.cpp
+  qgeosearchreply_osm.cpp
+  qgeosearchmanagerengine_osm.cpp
+  qgeoroutingmanagerengine_osm.cpp
+  qgeoroutereply_osm.cpp
+  routeparser.cpp
 )
 
-set (openstreetmap_HDRS
-  qgeomappingmanagerengine_openstreetmap.h
-  qgeomapreply_openstreetmap.h
-  qgeoserviceproviderplugin_openstreetmap.h
+set (osm_HDRS
+  qgeomappingmanagerengine_osm.h
+  qgeomapreply_osm.h
+  qgeoserviceproviderplugin_osm.h
+  qgeosearchreply_osm.h
+  qgeosearchmanagerengine_osm.h
+  qgeoroutingmanagerengine_osm.h
+  qgeoroutereply_osm.h
 )
 
-qt4_wrap_cpp(openstreetmap_MOCS ${openstreetmap_HDRS})
+qt4_wrap_cpp(osm_MOCS ${osm_HDRS})
 
-add_library (qtgeoservices_openstreetmap ${PLUGIN_TYPE} ${openstreetmap_SRCS} ${openstreetmap_MOCS})
-target_link_libraries(qtgeoservices_openstreetmap ${QT_LIBRARIES})
+add_library (qtgeoservices_osm ${PLUGIN_TYPE} ${osm_SRCS} ${osm_MOCS})
+target_link_libraries(qtgeoservices_osm ${QT_LIBRARIES})
 
-install(TARGETS qtgeoservices_openstreetmap
+install(TARGETS qtgeoservices_osm
   COMPONENT plugins
   LIBRARY DESTINATION ${PLUGINS_INSTALL_DIR}
   RUNTIME DESTINATION ${PLUGINS_INSTALL_DIR}

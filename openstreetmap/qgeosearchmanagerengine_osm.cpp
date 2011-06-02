@@ -49,6 +49,7 @@
 #include <QMap>
 #include <QApplication>
 #include <QFileInfo>
+#include <QLocale>
 
 //http://wiki.openstreetmap.org/wiki/Nominatim
 
