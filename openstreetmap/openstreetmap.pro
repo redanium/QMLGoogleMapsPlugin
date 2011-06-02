@@ -16,8 +16,11 @@ HEADERS += \
             qgeoserviceproviderplugin_osm.h \
             qgeocodeparser.h \
             qgeosearchreply_osm.h \
-            qgeosearchmanagerengine_osm.h
-
+            qgeosearchmanagerengine_osm.h \
+            parseproxy.h \
+            qgeoroutingmanagerengine_osm.h \
+            qgeoroutereply_osm.h \
+            routeparser.h
 
 SOURCES += \
             qgeomappingmanagerengine_osm.cpp \
@@ -25,7 +28,10 @@ SOURCES += \
             qgeoserviceproviderplugin_osm.cpp \
             qgeocodeparser.cpp \
             qgeosearchreply_osm.cpp \
-            qgeosearchmanagerengine_osm.cpp
+            qgeosearchmanagerengine_osm.cpp \
+            qgeoroutingmanagerengine_osm.cpp \
+            qgeoroutereply_osm.cpp \
+            routeparser.cpp
 
 symbian {
     TARGET.EPOCALLOWDLLDATA = 1
