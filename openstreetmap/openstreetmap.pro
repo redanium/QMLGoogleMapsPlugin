@@ -1,6 +1,6 @@
 TEMPLATE = lib
 CONFIG += plugin
-TARGET = $$qtLibraryTarget(qtgeoservices_openstreetmap)
+TARGET = $$qtLibraryTarget(qtgeoservices_osm)
 PLUGIN_TYPE=geoservices
 
 include(../common.pri)
