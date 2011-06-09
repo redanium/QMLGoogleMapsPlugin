@@ -44,9 +44,8 @@
 #include "qgeomappingmanagerengine_google.h"
 
 #include <QtPlugin>
-#include <QNetworkProxy>
 
-QGeoServiceProviderFactoryGoogle::QGeoServiceProviderFactoryGoogle() {}
+QGeoServiceProviderFactoryGoogle::QGeoServiceProviderFactoryGoogle() { }
 
 QGeoServiceProviderFactoryGoogle::~QGeoServiceProviderFactoryGoogle() {}
 

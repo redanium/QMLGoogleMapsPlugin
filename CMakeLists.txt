@@ -15,15 +15,12 @@
 # the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA 02110-1301, USA.
 
-PROJECT(qtm-geoservices-extras)
+project(qtm-geoservices-extras)
 
 #set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DQT_NO_CAST_FROM_ASCII -DQT_NO_CAST_TO_ASCII" )
 
 # Stop cmake 2.6 from whining
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-IF(COMMAND cmake_policy)
-  CMAKE_POLICY(SET CMP0003 NEW)
-ENDIF(COMMAND cmake_policy)
+cmake_minimum_required(VERSION 2.6)
 
 # where to look first for cmake modules, before ${CMAKE_ROOT}/Modules/ is checked
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
@@ -32,23 +29,22 @@ set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules")
 option(STATIC_PLUGINS "build static plugins [default: off]" OFF)
 
 # compile in debug mode
-IF(NOT CMAKE_BUILD_TYPE)
-  SET(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE RelWithDebInfo CACHE STRING
       "Choose the type of build, options are: None Debug Release RelWithDebInfo MinSizeRel."
       FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
+endif(NOT CMAKE_BUILD_TYPE)
 
-IF("${CMAKE_BUILD_TYPE}" MATCHES "^Rel.*")
-  ADD_DEFINITIONS("-DQT_NO_DEBUG_OUTPUT")
-  ADD_DEFINITIONS("-DQT_NO_DEBUG_OUTPUT")
-ENDIF("${CMAKE_BUILD_TYPE}" MATCHES "^Rel.*")
+if("${CMAKE_BUILD_TYPE}" MATCHES "^Rel.*")
+  add_definitions("-DQT_NO_DEBUG_OUTPUT")
+endif("${CMAKE_BUILD_TYPE}" MATCHES "^Rel.*")
 
 # Find Qt4
-FIND_PACKAGE( Qt4 REQUIRED )
-FIND_PACKAGE( QtMobility REQUIRED)
+find_package( Qt4 REQUIRED )
+find_package( QtMobility REQUIRED)
 
 #add extra search paths for libraries and includes
-SET (PLUGINS_INSTALL_DIR "plugins/geoservices/" CACHE STRING "Directory where lib will install")
+set (PLUGINS_INSTALL_DIR "plugins/geoservices/" CACHE STRING "Directory where lib will install")
 
 set(QTM_GEOSERVICES_EXTRA_MAJOR_VERSION "0")
 set(QTM_GEOSERVICES_EXTRA_MINOR_VERSION "1")
@@ -59,7 +55,7 @@ set(QTM_GEOSERVICES_EXTRA_VERSION_STRING "${QTM_GEOSERVICES_EXTRA_MAJOR_VERSION}
 # Include the cmake file needed to use qt4
 set(QT_USE_QTGUI TRUE)
 set(QT_USE_QTNETWORK TRUE)
-INCLUDE( ${QT_USE_FILE} )
+include( ${QT_USE_FILE} )
 
 # Subdirs
 add_subdirectory(google)

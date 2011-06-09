@@ -19,6 +19,8 @@ project(qtgeoservices_osm)
 
 include_directories (
   ${CMAKE_CURRENT_BUILD_DIR}
+  ${QT_MOBILITY_INCLUDE_DIR}
+  ${QT_MOBILITY_INCLUDE_DIR}/QtMobility
   ${QT_MOBILITY_LOCATION_INCLUDE_DIR}
   ${QT_INCLUDE_DIR}
 )

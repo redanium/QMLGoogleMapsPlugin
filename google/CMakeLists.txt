@@ -19,6 +19,8 @@ project(qtgeoservices_google)
 
 include_directories (
   ${CMAKE_CURRENT_BUILD_DIR}
+  ${QT_MOBILITY_INCLUDE_DIR}
+  ${QT_MOBILITY_INCLUDE_DIR}/QtMobility
   ${QT_MOBILITY_LOCATION_INCLUDE_DIR}
   ${QT_INCLUDE_DIR}
 )
@@ -47,7 +49,7 @@ set (google_HDRS
   qgeoserviceproviderplugin_google.h
 )
 
-qt4_wrap_cpp(google_MOCS ${lugdulov_HDRS})
+qt4_wrap_cpp(google_MOCS ${google_HDRS})
 
 add_library (qtgeoservices_google ${PLUGIN_TYPE} ${google_SRCS} ${google_MOCS})
 target_link_libraries(qtgeoservices_google ${QT_LIBRARIES})

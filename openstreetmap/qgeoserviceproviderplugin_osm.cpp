@@ -45,7 +45,6 @@
 #include "qgeosearchmanagerengine_osm.h"
 
 #include <QtPlugin>
-#include <QNetworkProxy>
 
 QGeoServiceProviderFactoryOsm::QGeoServiceProviderFactoryOsm() {}
 
