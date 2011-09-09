@@ -181,3 +181,4 @@ QString QGeoMappingManagerEngineGoogle::mapTypeToServer(QGraphicsGeoMap::MapType
     } else
       return "http://mt.google.com/vt/lyrs=&x=%1&s=&y=%2&z=%3";
 }
+

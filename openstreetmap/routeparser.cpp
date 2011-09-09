@@ -256,3 +256,4 @@ int RouteParser::parseTime(const QString &timeStr)
     }
     return seconds;
 }
+

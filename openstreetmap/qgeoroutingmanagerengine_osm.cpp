@@ -208,3 +208,4 @@ void QGeoRoutingManagerEngineOsm::routingError(QGeoRouteReply::Error error, cons
     emit this->error(reply, error, errorString);
 
 }
+

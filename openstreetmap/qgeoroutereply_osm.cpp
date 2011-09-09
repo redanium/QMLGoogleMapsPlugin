@@ -83,3 +83,4 @@ void QGeoRouteReplyOsm::networkFinished()
 
     m_reply->deleteLater();
 }
+

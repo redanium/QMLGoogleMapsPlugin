@@ -64,3 +64,4 @@ private slots:
 };
 
 #endif // QGEOROUTINGMANAGERENGINEOSM_H
+

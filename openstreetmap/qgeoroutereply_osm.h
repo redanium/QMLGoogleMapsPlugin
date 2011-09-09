@@ -48,3 +48,4 @@ public:
 };
 
 #endif // QGEOROUTEREPLYOSM_H
+
