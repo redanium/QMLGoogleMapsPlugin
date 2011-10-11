@@ -20,11 +20,10 @@ project(qtgeoservices_google)
 include_directories (
   ${CMAKE_CURRENT_BUILD_DIR}
   ${QT_MOBILITY_INCLUDE_DIR}
-  ${QT_MOBILITY_INCLUDE_DIR}/QtMobility
   ${QT_MOBILITY_LOCATION_INCLUDE_DIR}
   ${QT_INCLUDE_DIR}
 )
-
+message(STATUS ${QT_MOBILITY_INCLUDE_DIR}   ${QT_MOBILITY_LOCATION_INCLUDE_DIR})
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_PLUGIN)
 

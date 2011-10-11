@@ -4,7 +4,7 @@ set(MOBILITY_CONFIG_MKSPECS_FILE "")
 IF(EXISTS "${QT_MKSPECS_DIR}/features/mobilityconfig.prf")
     set(MOBILITY_CONFIG_MKSPECS_FILE "${QT_MKSPECS_DIR}/features/mobilityconfig.prf")
 ELSEIF(EXISTS "${QT_MKSPECS_DIR}/features/mobility.prf")
-    set(MOBILITY_CONFIG_MKSPECS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/Modules/mobilityconfig.prf")
+    set(MOBILITY_CONFIG_MKSPECS_FILE "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules/mobilityconfig.prf")
 ENDIF()
 
 macro(export_component component)
@@ -14,21 +14,62 @@ macro(export_component component)
         IF(${MOBILITY_FILE_CONTENTS} MATCHES "MOBILITY_CONFIG=.*${_COMPONENT}.*")
             STRING(TOUPPER ${component} _COMPONENT)
             SET(QT_MOBILITY_${_COMPONENT}_FOUND 1)
-            SET(QT_MOBILITY_${_COMPONENT}_INCLUDE_DIR ${QT_MOBILITY_PARENT_INCLUDE_DIR}/Qt${component})
-            SET(QT_MOBILITY_${_COMPONENT}_LIBRARY Qt${component})
+            SET(QT_MOBILITY_MODULE Qt${component})
+
+            SET(QT_MOBILITY_${_COMPONENT}_INCLUDE_DIR ${QT_MOBILITY_PARENT_INCLUDE_DIR}/${QT_MOBILITY_MODULE})
+
+            FIND_LIBRARY(QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE
+                 NAMES ${QT_MOBILITY_MODULE}${QT_LIBINFIX} ${QT_MOBILITY_MODULE}${QT_LIBINFIX}1
+                 PATHS ${QT_MOBILITY_LIBRARY_DIR} NO_DEFAULT_PATH
+            )
+            FIND_LIBRARY(QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG
+                 NAMES ${QT_MOBILITY_MODULE}${QT_LIBINFIX}_debug ${QT_MOBILITY_MODULE}${QT_LIBINFIX}d ${QT_MOBILITY_MODULE}${QT_LIBINFIX}d1
+                 PATHS ${QT_MOBILITY_LIBRARY_DIR} NO_DEFAULT_PATH
+            )
+
+            # if the release- as well as the debug-version of the library have been found:
+            IF (QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG AND QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE)
+              # if the generator supports configuration types then set
+              # optimized and debug libraries, or if the CMAKE_BUILD_TYPE has a value
+              IF (CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE)
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY       optimized ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE} debug ${QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG})
+              ELSE(CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE)
+                # if there are no configuration types and CMAKE_BUILD_TYPE has no value
+                # then just use the release libraries
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY       ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE} )
+              ENDIF(CMAKE_CONFIGURATION_TYPES OR CMAKE_BUILD_TYPE)
+              SET(QT_MOBILITY_${_COMPONENT}_LIBRARIES       optimized ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE} debug ${QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG})
+            ENDIF (QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG AND QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE)
+
+            # if only the release version was found, set the debug variable also to the release version
+            IF (QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE AND NOT QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG)
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE})
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY       ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE})
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARIES     ${QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE})
+            ENDIF (QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE AND NOT QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG)
+
+            # if only the debug version was found, set the release variable also to the debug version
+            IF (QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG AND NOT QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE)
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE ${QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG})
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARY         ${QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG})
+                SET(QT_MOBILITY_${_COMPONENT}_LIBRARIES       ${QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG})
+            ENDIF (QT_MOBILITY_${_COMPONENT}_LIBRARY_DEBUG AND NOT QT_MOBILITY_${_COMPONENT}_LIBRARY_RELEASE)
         ENDIF()
     ENDIF()
 endmacro()
 
 set(VERSION_INFO "")
 set(FEATURE_FILE_PREFIX "${QT_MKSPECS_DIR}/features/mobility")
+set(CONFIG_FILE_PREFIX "${QT_MKSPECS_DIR}/features/mobilityconfig")
 
 if(DEFINED MOBILITY_VERSION)
     if(MOBILITY_VERSION STREQUAL "1.1" AND EXISTS "${FEATURE_FILE_PREFIX}11.prf")
         set(MOBILITY_PRF_FILE "${FEATURE_FILE_PREFIX}11.prf")
+	set(MOBILITY_CONFIG_MKSPECS_FILE "${CONFIG_FILE_PREFIX}11.prf")
         set(VERSION_INFO "1.1")
     elseif(MOBILITY_VERSION STREQUAL "1.2" AND EXISTS "${FEATURE_FILE_PREFIX}12.prf")
         set(MOBILITY_PRF_FILE "${FEATURE_FILE_PREFIX}12.prf")
+	set(MOBILITY_CONFIG_MKSPECS_FILE "${CONFIG_FILE_PREFIX}12.prf")
         set(VERSION_INFO "1.2")
     elseif(MOBILITY_VERSION STREQUAL "default" AND EXISTS "${FEATURE_FILE_PREFIX}.prf")
         set(MOBILITY_PRF_FILE "${FEATURE_FILE_PREFIX}.prf")
@@ -49,11 +90,13 @@ if(NOT DEFINED MOBILITY_PRF_FILE)
         set(MOBILITY_PRF_FILE "${FEATURE_FILE_PREFIX}11.prf")
         set(VERSION_INFO "1.1")
     else()
-        message(FATAL_ERROR "Couldn't find any version of QtMobility.")
+        message(STATUS "Couldn't find any version of QtMobility.")
     endif()
 endif()
 
-message(STATUS "Using QtMobility version: ${VERSION_INFO}")
+IF(VERSION_INFO)
+	message(STATUS "Using QtMobility version: ${VERSION_INFO}")
+ENDIF()
 
 IF(DEFINED MOBILITY_PRF_FILE)
     FILE(READ ${MOBILITY_PRF_FILE} MOBILITY_FILE_CONTENTS)
@@ -66,6 +109,14 @@ IF(DEFINED MOBILITY_PRF_FILE)
 
     STRING(REGEX MATCH "MOBILITY_LIB=([^\n]+)" "\\1" QT_MOBILITY_LIBRARY "${MOBILITY_FILE_CONTENTS}")
     SET(QT_MOBILITY_LIBRARY_DIR ${CMAKE_MATCH_1})
+
+    # Maemo prf are not easilly parsable
+    CHECK_SYMBOL_EXISTS(Q_WS_MAEMO_5 "QtCore/qglobal.h" Q_WS_MAEMO_5)
+
+    if (Q_WS_MAEMO_5)
+      SET(QT_MOBILITY_INCLUDE_DIR "${QT_MOBILITY_PREFIX}/include")
+      SET(QT_MOBILITY_LIBRARY_DIR "${QT_MOBILITY_PREFIX}/lib")
+    ENDIF()
 
     #VERSION
     IF(NOT ${MOBILITY_CONFIG_MKSPECS_FILE} STREQUAL "")
@@ -125,7 +176,7 @@ IF(NOT QT_MOBILITY_FOUND)
     ELSEIF(QT_MOBILITY_TOO_NEW)
         MESSAGE(FATAL_ERROR "The installed QtMobility version ${QT_MOBILITY_VERSION} it too new, version ${QtMobility_FIND_VERSION} is required.")
     ELSE()
-        MESSAGE(FATAL_ERROR "QtMobility not found.")
+        MESSAGE(STATUS "QtMobility not found.")
     ENDIF()
 ELSE()
     export_component(Bearer)
