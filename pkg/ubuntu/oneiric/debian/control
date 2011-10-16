@@ -1,0 +1,17 @@
+Source: qtm-geoservices-extras
+Priority: extra
+Maintainer: Corentin Chary <corentin.chary@gmail.com>
+Build-Depends: debhelper (>= 7), cdbs, libqt4-dev, qtmobility-dev
+Standards-Version: 3.8.3
+Section: libs
+Homepage: http://xf.iksaif.net/dev/qtm-geoservices-extras.html
+
+Package: qtm-geoservices-google
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: QtLocation plugin for Google Maps.
+
+Package: qtm-geoservices-osm
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: QtLocation plugins for OpenStreetMap.
