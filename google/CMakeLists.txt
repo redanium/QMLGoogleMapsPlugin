@@ -23,7 +23,7 @@ include_directories (
   ${QT_MOBILITY_LOCATION_INCLUDE_DIR}
   ${QT_INCLUDE_DIR}
 )
-message(STATUS ${QT_MOBILITY_INCLUDE_DIR}   ${QT_MOBILITY_LOCATION_INCLUDE_DIR})
+
 add_definitions(${QT_DEFINITIONS})
 add_definitions(-DQT_PLUGIN)
 
@@ -51,7 +51,12 @@ set (google_HDRS
 qt4_wrap_cpp(google_MOCS ${google_HDRS})
 
 add_library (qtgeoservices_google ${PLUGIN_TYPE} ${google_SRCS} ${google_MOCS})
-target_link_libraries(qtgeoservices_google ${QT_LIBRARIES})
+
+link_directories(${QT_MOBILITY_LIBRARY_DIR})
+target_link_libraries(qtgeoservices_google
+	${QT_LIBRARIES}
+	${QT_MOBILITY_LOCATION_LIBRARY}
+)
 
 install(TARGETS qtgeoservices_google
   COMPONENT plugins

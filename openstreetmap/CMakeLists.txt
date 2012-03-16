@@ -61,7 +61,12 @@ set (osm_HDRS
 qt4_wrap_cpp(osm_MOCS ${osm_HDRS})
 
 add_library (qtgeoservices_osm ${PLUGIN_TYPE} ${osm_SRCS} ${osm_MOCS})
-target_link_libraries(qtgeoservices_osm ${QT_LIBRARIES})
+
+link_directories(${QT_MOBILITY_LIBRARY_DIR})
+target_link_libraries(qtgeoservices_osm
+	${QT_LIBRARIES}
+	${QT_MOBILITY_LOCATION_LIBRARY}
+)
 
 install(TARGETS qtgeoservices_osm
   COMPONENT plugins
